@@ -3,18 +3,30 @@ import React from 'react';
 import {createSwitchNavigator} from 'react-navigation';
 import MainDrawerNavigator from './screens/MainDrawerNavigator';
 import LoginScreen from './screens/Login';
-import ChatBotsScreen from './screens/Chat/ChatBotsScreen';
 import {AsyncStorage, ActivityIndicator, View} from "react-native";
 import $store from '../src/store';
+import axios, {setApiToken} from './services/axios';
 
 
 class LoadingScreen extends React.Component {
     componentDidMount = async () => {
-        const userData = await AsyncStorage.getItem('user');
+        let token = await AsyncStorage.getItem('token');
+        token = token === null ? '' : token;
 
-        if (!userData) screen = 'LoginScreen';
+        // Get the stored session or init a new one if token is not valid
+        let resp = await axios.get('session/init?token=' + token);
+        let session = resp.data;
+        token = session.id;
+
+        // Update token for axios
+        setApiToken(token);
+
+        $store.authSetToken(token);
+
+        let {user} = session;
+
+        if (!user) screen = 'LoginScreen';
         else {
-            const user = JSON.parse(userData);
             $store.authSetUser(user);
             screen = 'MainDrawerNavigator';
         }
@@ -22,6 +34,7 @@ class LoadingScreen extends React.Component {
         this.props.navigation.navigate(screen);
     };
 
+    
     render() {
         return <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <ActivityIndicator size="large"/>
@@ -34,7 +47,6 @@ const MainNavigator = createSwitchNavigator({
     LoadingScreen: LoadingScreen,
     LoginScreen: LoginScreen,
     MainDrawerNavigator: MainDrawerNavigator,
-    ChatScreen: ChatBotsScreen,
 }, {
     initialRouteName: 'LoadingScreen'
 });

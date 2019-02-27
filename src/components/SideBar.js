@@ -1,27 +1,33 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-elements';
-import {Header, Button} from 'react-native-elements';
+import {View} from 'react-native';
+import {Button, Text} from 'react-native-elements';
+import HeaderBar from './HeaderBar';
 
+import {getInitiative} from '../services/utils';
 import {listen} from "../react-redux-auto";
 import $store from '../store';
+import axios from '../services/axios';
 
 
 class SideBar extends React.Component {
-    logout = () => {
-        $store.authClearUser();
+    logout = async () => {
         this.props.navigation.navigate('LoginScreen');
+
+        await axios.get('session/logout');
+        $store.authClearUser();
     };
 
     render() {
-        let user = $store.auth?.user;
-
         return <View>
-            <Header style={{height: 56}}>
+            <HeaderBar>
                 <View></View>
-                <Button title={'Logout'} onPress={this.logout} />
+                <Text>{$store.auth.user.name} ({getInitiative($store.auth.user.name)})</Text>
                 <View></View>
-            </Header>
+            </HeaderBar>
+
+            <View>
+                <Button  title={'Logout'} onPress={this.logout} />
+            </View>
         </View>
     }
 }

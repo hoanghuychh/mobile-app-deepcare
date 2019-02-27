@@ -3,7 +3,7 @@ import {AsyncStorage, StyleSheet, View} from 'react-native';
 import {Text, SocialIcon} from 'react-native-elements';
 import firebase from 'react-native-firebase';
 import {AccessToken, LoginManager} from 'react-native-fbsdk';
-import axios from 'axios';
+import axios from '../services/axios';
 import {listen} from "../react-redux-auto";
 
 import $store from '../store';
@@ -11,7 +11,21 @@ import colors from './../colors';
 
 
 class Login extends React.Component {
+    loginUser = async (email, password) => {
+        try {
+            let resp = await axios.post('session/login', {email, password});
+
+            console.log('[Login] User logged in');
+            return resp.data;
+        } catch (e) {
+            console.log('[Login] User not found');
+            return null;
+        }
+    };
+
     loginFacebook = async () => {
+        let resp;
+
         const result = await LoginManager.logInWithReadPermissions(['public_profile', 'email']);
 
         if (result.isCancelled) return alert('User cancelled request');
@@ -24,11 +38,24 @@ class Login extends React.Component {
 
         const firebaseUserCredential = await firebase.auth().signInWithCredential(credential);
 
-        let resp = await axios.get(`https://graph.facebook.com/v3.2/${data.userID}?access_token=${data.accessToken}&fields=email,first_name&format=json`);
+        resp = await axios.get(`https://graph.facebook.com/v3.2/${data.userID}?access_token=${data.accessToken}&fields=email,first_name&format=json`);
+        let userData = resp.data;
+
+        let user = await this.loginUser(userData.email, data.userID);
+
+        // If cannot login user then try to register a new account
+        if (!user) {
+            resp = await axios.post('user/register', {
+                email: userData.email,
+                password: data.userID,
+                name: userData.first_name
+            });
+            user = resp.data;
+        }
 
         // Set value in store
-        $store.authSetUser(resp.data);
-        console.log("Login loginFacebook data response = " + JSON.stringify(resp.data))
+        $store.authSetUser(user);
+
         this.props.navigation.navigate('MainDrawerNavigator');
     };
 
