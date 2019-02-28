@@ -1,99 +1,197 @@
-import React from 'react';
-import {AsyncStorage, StyleSheet, View} from 'react-native';
-import {Text, SocialIcon} from 'react-native-elements';
-import firebase from 'react-native-firebase';
-import {AccessToken, LoginManager} from 'react-native-fbsdk';
-import axios from '../services/axios';
-import {listen} from "../react-redux-auto";
+import React, { Component } from 'react';
+import { View, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { Input, SearchBar, Button, Text, Icon, SocialIcon } from 'react-native-elements';
 
-import $store from '../store';
-import colors from './../colors';
+import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Colors from "../commons/Colors"
 
+const TYPE_CHANGE_USER = "TYPE_CHANGE_USER";
+const TYPE_CHANGE_PASS = "TYPE_CHANGE_PASS";
 
-class Login extends React.Component {
-    loginUser = async (email, password) => {
-        try {
-            let resp = await axios.post('session/login', {email, password});
+export default class Login extends Component {
+  constructor(props) {
+    super(props);
 
-            console.log('[Login] User logged in');
-            return resp.data;
-        } catch (e) {
-            console.log('[Login] User not found');
-            return null;
-        }
+    this.state = {
+        userName: "",
+        password: "",
+        errorPassword: "",
+        errorUserName: ""
     };
+    this.doLogin = this.doLogin.bind(this);
+  }
 
-    loginFacebook = async () => {
-        let resp;
+  async componentDidMount() {
 
-        const result = await LoginManager.logInWithReadPermissions(['public_profile', 'email']);
 
-        if (result.isCancelled) return alert('User cancelled request');
+  }
 
-        const data = await AccessToken.getCurrentAccessToken();
+  validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
 
-        if (!data) return alert('Something went wrong obtaining the users access token');
-
-        const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
-
-        const firebaseUserCredential = await firebase.auth().signInWithCredential(credential);
-
-        resp = await axios.get(`https://graph.facebook.com/v3.2/${data.userID}?access_token=${data.accessToken}&fields=email,first_name&format=json`);
-        let userData = resp.data;
-
-        let user = await this.loginUser(userData.email, data.userID);
-
-        // If cannot login user then try to register a new account
-        if (!user) {
-            resp = await axios.post('user/register', {
-                email: userData.email,
-                password: data.userID,
-                name: userData.first_name
-            });
-            user = resp.data;
-        }
-
-        // Set value in store
-        $store.authSetUser(user);
-
-        this.props.navigation.navigate('MainDrawerNavigator');
-    };
-
-    render() {
-        return <View style={styles.container}>
-            <Text style={styles.brand}>Am Coming</Text>
-
-            <SocialIcon
-                button
-                title='Sign In With Facebook'
-                type='facebook'
-                onPress={this.loginFacebook}
-            />
-
-            <SocialIcon
-                button
-                title='Sign In With Google'
-                type='google-plus-official'
-            />
-        </View>
+  doLogin() {
+    let userName = this.state.userName;
+    let password = this.state.password;
+    if(userName == null || userName === "") {
+        let errorName = "Invalid field userName!";
+        let errorPassword = "Invalid field passWord!";
+        this.setState({errorUserName: errorName})
+        return;
     }
+    if(password == null || password === "") {
+        let errorPassword = "Invalid field passWord!";
+        this.setState({errorPassword: errorPassword})
+        return;
+    }
+
+  }
+
+  doSignIn() {
+      alert("signIn")
+  }
+
+  doForgotPass() {
+    alert("doForgotPass...")
+  }
+
+  onChangeUserName(type, text) {
+    if(type === TYPE_CHANGE_USER) {
+        this.setState({errorUserName: "", userName: text})
+    } else {
+        this.setState({errorPassword: "", password: text})
+    }
+    
+  }
+
+  render() {
+  
+    return (
+        <View style={styles.container}>
+            <Text style ={styles.txtLogin}>Login</Text>
+            <Text style = {styles.titleInput}>Username</Text>
+            <Input
+                leftIcon={
+                <FontAwesome
+                    name="user"
+                    color='black'
+                    size={24}
+                />
+                }
+                containerStyle={styles.inputContainerStyle}
+                placeholder="type your username..."
+                shake={true}
+                errorMessage = {this.state.errorUserName}
+                onChangeText={userName => this.onChangeUserName(TYPE_CHANGE_USER, userName)}
+                value={this.state.userName}
+            />
+            <Text style = {styles.titleInput}>Password</Text>
+            <Input
+                leftIcon={
+                <Icon
+                    name="lock"
+                    color='black'
+                    size={24}
+                />
+                }
+                containerStyle={styles.inputContainerStyle}
+                placeholder="type your password..."
+                shake={true}
+                errorMessage = {this.state.errorPassword}
+                onChangeText={password => this.onChangeUserName(TYPE_CHANGE_PASS, password)}
+                value={this.state.password}
+            />
+            <Text style = {styles.titleForgot} onPress={this.doForgotPass}>Forgot password?</Text>
+            <Button
+                buttonStyle = {styles.btnLogin}
+                onPress={this.doLogin}
+                title="LOGIN"
+                containerStyle={{width: '100%'}}
+            />
+            <Text style ={styles.textOrSignUp}>Or Sign Up Using</Text>
+            <View style = {styles.groupSocial}>
+                <SocialIcon             
+                    type='facebook'
+                />
+                <SocialIcon    
+                    type='twitter'
+                />
+                <SocialIcon
+                    type='google-plus-official'
+                />
+                <SocialIcon     
+                    type='instagram'
+                />
+            </View>
+            <View style={styles.groupButtom}>
+                <Text style ={styles.textOrSignUp}>Have not account yet?</Text>
+                <Text style ={styles.textSignUp} onPress={this.doSignIn}>SIGN UP</Text>
+            </View>
+      </View>
+    );
+  }
 }
 
-
-export default listen('auth')(Login);
-
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        padding: 20
-    },
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+    flexDirection: "column",
+    alignItems: "center",
+    marginLeft: 30,
+    marginRight: 30
+  },
+  txtLogin: {
+    color: Colors.black,
+    fontWeight: "bold",
+    fontSize: 25,
+    marginTop: 35,
+    marginBottom: 30
+  },
+  titleInput: {
+    marginTop: 15,
+    textAlign: "left",
+    alignSelf: "flex-start",
+    paddingLeft: 15
+  },
+  inputContainerStyle: {
+    width: "100%"
+  },
+  titleForgot:{
+    textAlign: "right",
+    alignSelf: "flex-end",
+    marginTop: 10,
+    paddingRight: 10,
+  },
+  btnLogin: {
+      width: "80%",
+      alignSelf: "center",
+      justifyContent: "center",
+      marginTop: 15
+  },
+  textOrSignUp: {
+      marginTop: 20,
+  },
+  groupSocial: {
+      flexDirection: 'row',
+      marginTop: 10
+  },
+  groupButtom:{
+    flex: 1,
+    justifyContent: 'flex-end',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  textSignUp: {
+    marginTop: 5,
+    fontSize: 18,
+    fontWeight: "bold",
+    color: Colors.black,
+    marginBottom: 10
+},
+ 
 
-    brand: {
-        color: colors.primary,
-        fontSize: 48,
-        alignSelf: 'center',
-        fontWeight: 'bold',
-        marginVertical: 80
-    }
 });

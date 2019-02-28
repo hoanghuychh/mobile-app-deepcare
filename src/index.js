@@ -31,7 +31,7 @@ class LoadingScreen extends React.Component {
             screen = 'MainDrawerNavigator';
         }
 
-        this.props.navigation.navigate(screen);
+        this.props.navigation.navigate(LoginScreen);
     };
 
     
@@ -42,13 +42,13 @@ class LoadingScreen extends React.Component {
     }
 }
 
-
+//createSwitchNavigator bỏ qua nút back
 const MainNavigator = createSwitchNavigator({
     LoadingScreen: LoadingScreen,
     LoginScreen: LoginScreen,
     MainDrawerNavigator: MainDrawerNavigator,
 }, {
-    initialRouteName: 'LoadingScreen'
+    initialRouteName: 'LoginScreen'
 });
 
 export default MainNavigator;

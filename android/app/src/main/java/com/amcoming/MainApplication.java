@@ -1,20 +1,20 @@
 package com.amcoming;
 
 import android.app.Application;
-
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
 import com.facebook.react.ReactApplication;
+import com.codegulp.invokeapp.ReactNativeInvokeAppPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import com.airbnb.android.react.maps.MapsPackage;
 
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import io.invertase.firebase.RNFirebasePackage;
@@ -43,6 +43,8 @@ public class MainApplication extends Application implements ReactApplication {
 
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+          new ReactNativeInvokeAppPackage(),
+          new VectorIconsPackage(),
           new RNGestureHandlerPackage(),
           new MapsPackage(),
           new RNFirebasePackage(),
