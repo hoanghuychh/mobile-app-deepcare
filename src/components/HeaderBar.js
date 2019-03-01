@@ -1,6 +1,6 @@
 import React from 'react';
 import {Header} from 'react-native-elements';
-import colors from '../colors';
+import colors from '../commons/Colors';
 
 
 export default class HeaderBar extends React.Component {

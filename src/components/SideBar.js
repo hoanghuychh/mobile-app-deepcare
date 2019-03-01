@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {Button, Text} from 'react-native-elements';
 import HeaderBar from './HeaderBar';
 
-import {getInitiative} from '../services/utils';
+import {getInitiative} from '../commons/Utils';
 import {listen} from "../react-redux-auto";
 import $store from '../store';
 import axios from '../services/axios';
@@ -21,7 +21,7 @@ class SideBar extends React.Component {
         return <View>
             <HeaderBar>
                 <View></View>
-                <Text>{$store.auth.user.name} ({getInitiative($store.auth.user.name)})</Text>
+                <Text></Text>
                 <View></View>
             </HeaderBar>
 

@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { View, ScrollView, StyleSheet, Dimensions, ImageBackground } from 'react-native';
+import { View, ScrollView, StyleSheet, Dimensions, ImageBackground, Platform , 
+    TouchableOpacity, ActivityIndicator, AsyncStorage} from 'react-native';
 import { Input, SearchBar, Button, Text, Icon, 
-    SocialIcon, Card, Avatar,Tile, Overlay } from 'react-native-elements';
-
+    SocialIcon, Card, Avatar,Tile, Header } from 'react-native-elements';
+import { NavigationEvents } from "react-navigation";
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Colors from "../../commons/Colors"
+import Colors from "../../commons/Colors";
+import Constants from "../../commons/Constants";
+import axios, {setApiToken} from '../../services/axios';
 
 
 export default class PatientProfile extends Component {
@@ -14,7 +17,10 @@ export default class PatientProfile extends Component {
     super(props);
 
     this.state = {
-       
+       isLoading: false,
+       isLoadData: false,
+       //data profile
+
     };
    
   }
@@ -24,14 +30,71 @@ export default class PatientProfile extends Component {
 
   }
 
-  
+  loadDataProfile = async () => {
+   let token = await AsyncStorage.getItem(Constants.KEY_STORE_TOKEN);
+   let getProfile = await AsyncStorage.getItem(Constants.KEY_STORE_USER_PFOFILE);
+   let userProfile = JSON.parse(getProfile);
+   let userID = userProfile.user.user_id;
+    token = token === null ? '' : token;
+    let xKey = "";
+    let config = {
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "x-key": xKey,
+            "x-access-token": token,
+        }
+    };
+    const url = "api/v2/user/getUserByUserID/".concat(userID);
+    let response = await axios.get(url, config);
+    this.setState({isLoading: false});
+    console.log("PatientProfile response " + JSON.stringify(response.data) + " url: " + url )
+
+  }
+
+  onPressBackScreen() {
+      alert("back...")
+  }
+
+  onPressBtn() {
+    alert("onPress...")
+  }
+
+  onDidFocus() {
+    if(!this.state.isLoadData) {
+        this.setState({isLoadData: true, isLoading: true })
+        this.loadDataProfile();
+    }
+  }
 
   render() {
-  
+      if(this.state.isLoading) {
+        return (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: "column"}}>
+            <ActivityIndicator size="large"/>
+        </View>
+          );
+      } else {
     return (
         <View style={styles.container}>
+            <NavigationEvents
+                onDidFocus={payload => {
+                    this.onDidFocus();
+                }}
+               
+            />
             <View style={styles.layoutTop}>
-            <ImageBackground source={require("../../../assets/bg_profile.jpg")} style={styles.layoutTop}>          
+            <ImageBackground source={require("../../../assets/bg_profile.jpg")} style={styles.layoutTop}>   
+                <View style={styles.wrapHeader}>
+                    <FontAwesome
+                        name='chevron-left'
+                        color={Colors.white}
+                        size={25}
+                        onPress={() => this.onPressBackScreen()}
+                    />  
+                    <Text style={{flex: 1,color:Colors.white, justifyContent: "center", alignItems: "center", alignSelf: "center", textAlign: "center", 
+                    fontSize: 20, fontWeight: "bold"}}>Current Patient</Text>     
+                </View>
                 <View style = {styles.wrapTopIcon}>
                     <Avatar
                         size={100}
@@ -47,6 +110,7 @@ export default class PatientProfile extends Component {
                         <Text style ={{color: Colors.gray_white, paddingLeft: 10}}>Developer</Text>
                     </View>
                 </View>
+
                 <View style={styles.wrapDesInfo}>
                     <View style={{flexDirection: "column", marginRight: 20}}>
                         <View style={{flexDirection: "row"}}>
@@ -75,13 +139,14 @@ export default class PatientProfile extends Component {
             <View style={styles.layoutOptions}>
                 <Card containerStyle={styles.layout_card} wrapperStyle = {styles.viewCard}>
                     <View style={styles.viewCard}>
-                            <Text style={{flex: 1, flexDirection: "column", alignItems: "center",textAlign: "center"}}>Precribe</Text>
+                            <Text style={{flex: 1, flexDirection: "column", alignItems: "center", textAlign: "center"}}>Precribe</Text>
                             <Text style={{flex: 1, flexDirection: "column", alignItems: "center", textAlign: "center"}}>Investigation</Text>
                             <Text style={{flex: 1, flexDirection: "column", alignItems: "center", textAlign: "center"}}>Diet plan</Text>
                     </View>
                 </Card>
                 <View style={styles.wrapButtonMenu}>
-                    <Card containerStyle={styles.cardOptions} wrapperStyle = {styles.cardOptions}>
+                    <TouchableOpacity onPress={() => this.onPressBackScreen()}>
+                    <Card containerStyle={styles.cardOptions} wrapperStyle = {styles.cardOptions} >
                         <FontAwesome
                             name="user"
                             color='green'
@@ -89,7 +154,9 @@ export default class PatientProfile extends Component {
                         />
                         <Text style={{color: Colors.black, textAlign: "center"}}>{`Chief\nComplaints`}</Text>
                     </Card>
-                       
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => this.onPressBackScreen()}>
                     <Card containerStyle={styles.cardOptions} wrapperStyle = {styles.cardOptions}>
                         <FontAwesome
                             name="info-circle"
@@ -98,6 +165,9 @@ export default class PatientProfile extends Component {
                         />
                         <Text style={{color: Colors.black, textAlign: "center"}}>{`Health\nInfomation`}</Text>
                     </Card>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => this.onPressBackScreen()}>
                     <Card containerStyle={styles.cardOptions} wrapperStyle = {styles.cardOptions}>
                         <FontAwesome
                             name="heartbeat"
@@ -105,9 +175,11 @@ export default class PatientProfile extends Component {
                             size={24}
                         />
                         <Text style={{color: Colors.black, textAlign: "center"}}>{`Medication`}</Text>
-                    </Card>    
+                    </Card>  
+                    </TouchableOpacity>  
                 </View>   
-                <View style={[styles.wrapButtonMenu, {marginTop: 10}]}>
+                <View style={[styles.wrapButtonMenu]}>
+                    <TouchableOpacity onPress={() => this.onPressBackScreen()}>
                     <Card containerStyle={styles.cardOptions} wrapperStyle = {styles.cardOptions}>
                         <FontAwesome
                             name="flask"
@@ -116,7 +188,9 @@ export default class PatientProfile extends Component {
                         />
                         <Text style={{color: Colors.black, textAlign: "center"}}>{`Lab Result`}</Text>
                     </Card>
-                        
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => this.onPressBackScreen()}>
                     <Card containerStyle={styles.cardOptions} wrapperStyle = {styles.cardOptions}>
                         <FontAwesome
                             name="medkit"
@@ -125,6 +199,9 @@ export default class PatientProfile extends Component {
                         />
                         <Text style={{color: Colors.black, textAlign: "center"}}>{`Diseases`}</Text>  
                     </Card>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => this.onPressBackScreen()}>
                     <Card containerStyle={styles.cardOptions} wrapperStyle = {styles.cardOptions}>
                         <FontAwesome
                             name="user"
@@ -133,11 +210,13 @@ export default class PatientProfile extends Component {
                         />
                         <Text style={{color: Colors.black, textAlign: "center"}}>{`Family\nDiseases`}</Text>
                     </Card>    
+                    </TouchableOpacity>
                 </View> 
             </View>
             
       </View>
     );
+    }
   }
 }
 
@@ -157,12 +236,19 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: 'column',
   },
+  wrapHeader:{
+    position: "absolute", 
+    top: 0,
+    width: "100%",
+    flexDirection: 'row',
+    paddingTop: 10
+  },
   wrapTopIcon:{
     flexDirection: 'row',
     alignItems: 'flex-end',
     marginLeft: 30,
-    paddingBottom: 10,
-    flex: 1,
+    paddingBottom: 5,
+    flex: 1.5,
   },
   wrapTopName:{
     flexDirection: 'column',
@@ -194,7 +280,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginLeft: 30,
     marginRight: 30,
-    marginTop: "-15%"
+    marginTop: "-10%"
     
  },
  viewCard:{
@@ -226,7 +312,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
  },
-
  
 
 });

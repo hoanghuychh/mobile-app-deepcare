@@ -3,7 +3,7 @@ import React from 'react';
 import {createSwitchNavigator} from 'react-navigation';
 import MainDrawerNavigator from './screens/MainDrawerNavigator';
 import LoginScreen from './screens/Login';
-import PatientProfile from "./screens/patientprofile/PatientProfile";
+import PatientProfile from './screens/patientprofile/PatientProfile';
 import {AsyncStorage, ActivityIndicator, View} from "react-native";
 import $store from '../src/store';
 import axios, {setApiToken} from './services/axios';
@@ -48,9 +48,8 @@ const MainNavigator = createSwitchNavigator({
     LoadingScreen: LoadingScreen,
     LoginScreen: LoginScreen,
     MainDrawerNavigator: MainDrawerNavigator,
-    PatientProfile: PatientProfile
 }, {
-    initialRouteName: 'PatientProfile'
+    initialRouteName: 'LoginScreen'
 });
 
 export default MainNavigator;

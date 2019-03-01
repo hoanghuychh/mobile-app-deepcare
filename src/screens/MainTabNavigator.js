@@ -4,6 +4,7 @@ import {Icon} from 'react-native-elements';
 
 import SideBar from '../components/SideBar';
 import MapScreen from './Map';
+import PatientProfile from "./patientprofile/PatientProfile";
 import DashboardScreen from './Dashboard';
 
 
@@ -22,6 +23,7 @@ let genRoute = (module, icon, header) => ({
 const RouteConfigs = {
     DashboardScreen: genRoute(DashboardScreen, 'home'),
     MapScreen: genRoute(MapScreen, 'map'),
+    PatientProfile: genRoute(PatientProfile, 'user')
 };
 
 const BottomTabNavigatorConfig = {

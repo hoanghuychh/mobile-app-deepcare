@@ -1,6 +1,6 @@
 export default {
     baseBackground: "powderblue",
-    defaultHeader: "#48adc4",
+    primary: "#48adc4",
     gray: "#9f9fa0",
     gray_white: "#eaebed",
     white: "#ffffff",

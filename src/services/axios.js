@@ -2,7 +2,8 @@ import axios from 'axios';
 
 
 let _axios = axios.create({
-    baseURL: 'http://192.168.100.22:8000/api/'
+    baseURL: 'http://35.238.126.42:443/',
+    timeout: 10 * 1000, //timeout 10s
 });
 
 _axios.interceptors.request.use(config => {

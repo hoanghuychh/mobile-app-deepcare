@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { View, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { View, ScrollView, StyleSheet, Dimensions, AsyncStorage } from 'react-native';
 import { Input, SearchBar, Button, Text, Icon, SocialIcon } from 'react-native-elements';
 
+import DialogLoading from "../components/DialogLoading";
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Colors from "../commons/Colors"
+import Colors from "../commons/Colors";
+import Constants from "../commons/Constants";
+import axios, {setApiToken} from '../services/axios';
 
 const TYPE_CHANGE_USER = "TYPE_CHANGE_USER";
 const TYPE_CHANGE_PASS = "TYPE_CHANGE_PASS";
@@ -18,7 +21,8 @@ export default class Login extends Component {
         userName: "",
         password: "",
         errorPassword: "",
-        errorUserName: ""
+        errorUserName: "",
+        showLoading: false
     };
     this.doLogin = this.doLogin.bind(this);
   }
@@ -33,7 +37,7 @@ export default class Login extends Component {
     return re.test(email);
   }
 
-  doLogin() {
+  doLogin = async() =>{
     let userName = this.state.userName;
     let password = this.state.password;
     if(userName == null || userName === "") {
@@ -47,6 +51,31 @@ export default class Login extends Component {
         this.setState({errorPassword: errorPassword})
         return;
     }
+    var requestBody = {};
+    if(this.validateEmail(userName)) {
+        requestBody = { email: userName, password: password, phone: "" };
+    } else {
+        requestBody = { email: "", password: password, phone: userName };
+    }
+    let xKey = "";
+    let config = {
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "x-key": xKey
+        }
+    };
+    this.setState({showLoading: true})
+    response = await axios.post('login', requestBody, config );
+    let userProfile = response.data;
+    console.log("Login response " + JSON.stringify(userProfile));
+   
+    //save token
+    let token = userProfile.token; 
+    await AsyncStorage.setItem(Constants.KEY_STORE_TOKEN, token);
+    await AsyncStorage.setItem(Constants.KEY_STORE_USER_PFOFILE, JSON.stringify(userProfile));
+    this.setState({showLoading: false})
+    this.props.navigation.navigate("MainDrawerNavigator");
 
   }
 
@@ -130,6 +159,7 @@ export default class Login extends Component {
                 <Text style ={styles.textOrSignUp}>Have not account yet?</Text>
                 <Text style ={styles.textSignUp} onPress={this.doSignIn}>SIGN UP</Text>
             </View>
+            <DialogLoading loading={this.state.showLoading} />
       </View>
     );
   }
@@ -192,6 +222,5 @@ const styles = StyleSheet.create({
     color: Colors.black,
     marginBottom: 10
 },
- 
 
 });
