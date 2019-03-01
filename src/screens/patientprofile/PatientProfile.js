@@ -32,8 +32,9 @@ export default class PatientProfile extends Component {
 
   loadDataProfile = async () => {
    let token = await AsyncStorage.getItem(Constants.KEY_STORE_TOKEN);
-   let getProfile = await AsyncStorage.getItem(Constants.KEY_STORE_USER_PFOFILE);
+   let getProfile = await AsyncStorage.getItem(Constants.KEY_STORE_USER_PROFILE);
    let userProfile = JSON.parse(getProfile);
+   console.log("PatientProfile getProfile " + getProfile + " userProfile: " + JSON.stringify(userProfile) )
    let userID = userProfile.user.user_id;
     token = token === null ? '' : token;
     let xKey = "";

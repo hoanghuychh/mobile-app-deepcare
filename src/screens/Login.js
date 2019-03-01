@@ -10,6 +10,10 @@ import Colors from "../commons/Colors";
 import Constants from "../commons/Constants";
 import axios, {setApiToken} from '../services/axios';
 
+import { Translate } from "../configs/language/Language";
+import DefineKey from "../configs/language/DefineKey";
+import WarningDialog from "../components/WarningDialog";
+
 const TYPE_CHANGE_USER = "TYPE_CHANGE_USER";
 const TYPE_CHANGE_PASS = "TYPE_CHANGE_PASS";
 
@@ -22,14 +26,50 @@ export default class Login extends Component {
         password: "",
         errorPassword: "",
         errorUserName: "",
-        showLoading: false
+        showLoading: false,
+        warningdialogvisible: false,
+        errTitle: "",
+        errContent: "",
     };
+    this.onOpenDialogWarning = this.onOpenDialogWarning.bind(this);
+    this.onWarningOk = this.onWarningOk.bind(this);
     this.doLogin = this.doLogin.bind(this);
   }
 
   async componentDidMount() {
 
 
+  }
+
+  componentWillReceiveProps(props) {
+    let errorLogin = props.lastError;
+    if (errorLogin === "") {
+        console.log(`Login userProfile = ${JSON.stringify(props.userProfile)}`)
+        let userId = props.userProfile.user_id;
+        
+        this.redirectToMainScreen(userId);
+    } else {
+      if (errorLogin != null && errorLogin !== "") {
+        let errTitle = Translate(DefineKey.DialogWarning_text_title);
+        this.onOpenDialogWarning(errTitle, errorLogin);
+      }
+    }
+  }
+
+  redirectToMainScreen(userId) {
+      this.props.navigation.navigate("MainDrawerNavigator");
+  }
+
+  onOpenDialogWarning(errTitle, errContent) {
+    this.setState({
+      warningdialogvisible: true,
+      errTitle: errTitle,
+      errContent: errContent
+    });
+    // this.refs.dialogWarning.showModal();
+  }
+  onWarningOk() {
+    this.setState({ warningdialogvisible: false });
   }
 
   validateEmail(email) {
@@ -57,25 +97,7 @@ export default class Login extends Component {
     } else {
         requestBody = { email: "", password: password, phone: userName };
     }
-    let xKey = "";
-    let config = {
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "x-key": xKey
-        }
-    };
-    this.setState({showLoading: true})
-    response = await axios.post('login', requestBody, config );
-    let userProfile = response.data;
-    console.log("Login response " + JSON.stringify(userProfile));
-   
-    //save token
-    let token = userProfile.token; 
-    await AsyncStorage.setItem(Constants.KEY_STORE_TOKEN, token);
-    await AsyncStorage.setItem(Constants.KEY_STORE_USER_PFOFILE, JSON.stringify(userProfile));
-    this.setState({showLoading: false})
-    this.props.navigation.navigate("MainDrawerNavigator");
+    this.props.doLogin(requestBody);
 
   }
 
@@ -159,7 +181,8 @@ export default class Login extends Component {
                 <Text style ={styles.textOrSignUp}>Have not account yet?</Text>
                 <Text style ={styles.textSignUp} onPress={this.doSignIn}>SIGN UP</Text>
             </View>
-            <DialogLoading loading={this.state.showLoading} />
+            <DialogLoading loading={this.props.showLoading} />
+            <WarningDialog titleDialog={this.state.errTitle} contentDialog={this.state.errContent} onOk={this.onWarningOk.bind()} textOk={Translate(DefineKey.DialogWarning_text_ok)} visible={this.state.warningdialogvisible} />
       </View>
     );
   }

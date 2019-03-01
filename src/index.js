@@ -2,7 +2,7 @@ import React from 'react';
 
 import {createSwitchNavigator} from 'react-navigation';
 import MainDrawerNavigator from './screens/MainDrawerNavigator';
-import LoginScreen from './screens/Login';
+import LoginContainer from './containers/LoginContainer';
 import PatientProfile from './screens/patientprofile/PatientProfile';
 import {AsyncStorage, ActivityIndicator, View} from "react-native";
 import $store from '../src/store';
@@ -13,24 +13,6 @@ class LoadingScreen extends React.Component {
     componentDidMount = async () => {
         let token = await AsyncStorage.getItem('token');
         token = token === null ? '' : token;
-
-        // Get the stored session or init a new one if token is not valid
-        let resp = await axios.get('session/init?token=' + token);
-        let session = resp.data;
-        token = session.id;
-
-        // Update token for axios
-        setApiToken(token);
-
-        $store.authSetToken(token);
-
-        let {user} = session;
-
-        if (!user) screen = 'LoginScreen';
-        else {
-            $store.authSetUser(user);
-            screen = 'MainDrawerNavigator';
-        }
 
         this.props.navigation.navigate(LoginScreen);
     };
@@ -46,7 +28,7 @@ class LoadingScreen extends React.Component {
 //createSwitchNavigator bỏ qua nút back
 const MainNavigator = createSwitchNavigator({
     LoadingScreen: LoadingScreen,
-    LoginScreen: LoginScreen,
+    LoginScreen: LoginContainer,
     MainDrawerNavigator: MainDrawerNavigator,
 }, {
     initialRouteName: 'LoginScreen'
