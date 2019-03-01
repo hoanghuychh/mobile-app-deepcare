@@ -37,11 +37,11 @@ const BottomTabNavigatorConfig = {
 const BottomTabNavigator = createBottomTabNavigator(RouteConfigs, BottomTabNavigatorConfig);
 
 
-const DrawerNavigator = createDrawerNavigator({
-    App: {screen: BottomTabNavigator},
-}, {
-    contentComponent: navigation => <SideBar navigation={navigation.navigation}/>
-});
+// const DrawerNavigator = createDrawerNavigator({
+//     App: {screen: BottomTabNavigator},
+// }, {
+//     contentComponent: navigation => <SideBar navigation={navigation.navigation}/>
+// });
 
 
-export default DrawerNavigator;
+export default BottomTabNavigator;
