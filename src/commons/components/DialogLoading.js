@@ -5,7 +5,7 @@ import {
   Modal,
   ActivityIndicator
 } from 'react-native';
-import Colors from "../commons/Colors";
+import Colors from "../Colors";
 
 const Loader = props => {
   const {

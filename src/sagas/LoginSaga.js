@@ -7,11 +7,11 @@ import {
 } from "../actions/ActionType";
   //Saga effects
 import { put, takeLatest } from 'redux-saga/effects';
-import { Api } from './Api';
+import { Api } from '../commons/Api';
 import Constants from "../commons/Constants";
 import { AsyncStorage } from "react-native";
-import {Translate} from "../configs/language/Language"
-import DefineKey from "../configs/language/DefineKey";
+import {Translate} from "../commons/configs/language/Language"
+import DefineKey from "../commons/configs/language/DefineKey";
 
 function* doLoginUserData(action) {
     try {

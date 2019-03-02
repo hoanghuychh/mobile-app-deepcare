@@ -9,7 +9,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Colors from "../../commons/Colors";
 import Constants from "../../commons/Constants";
-import axios, {setApiToken} from '../../services/axios';
+import axios, {setApiToken} from '../../commons/services/axios';
 
 
 export default class PatientProfile extends Component {

@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import { View, ScrollView, StyleSheet, Dimensions, AsyncStorage } from 'react-native';
 import { Input, SearchBar, Button, Text, Icon, SocialIcon } from 'react-native-elements';
 
-import DialogLoading from "../components/DialogLoading";
+import DialogLoading from "../commons/components/DialogLoading";
 import SimpleIcon from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Colors from "../commons/Colors";
 import Constants from "../commons/Constants";
-import axios, {setApiToken} from '../services/axios';
+import axios, {setApiToken} from '../commons/services/axios';
 
-import { Translate } from "../configs/language/Language";
-import DefineKey from "../configs/language/DefineKey";
-import WarningDialog from "../components/WarningDialog";
+import { Translate } from "../commons/configs/language/Language";
+import DefineKey from "../commons/configs/language/DefineKey";
+import WarningDialog from "../commons/components/WarningDialog";
 
 const TYPE_CHANGE_USER = "TYPE_CHANGE_USER";
 const TYPE_CHANGE_PASS = "TYPE_CHANGE_PASS";

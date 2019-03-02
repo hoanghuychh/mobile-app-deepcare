@@ -2,7 +2,7 @@ import React from 'react';
 import {createBottomTabNavigator, createDrawerNavigator} from 'react-navigation';
 import {Icon} from 'react-native-elements';
 
-import SideBar from '../components/SideBar';
+import SideBar from '../commons/components/SideBar';
 import MapScreen from './Map';
 import PatientProfile from "./patientprofile/PatientProfile";
 import DashboardScreen from './Dashboard';

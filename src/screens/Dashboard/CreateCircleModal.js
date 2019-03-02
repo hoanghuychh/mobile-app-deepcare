@@ -2,9 +2,9 @@ import React from 'react';
 import {StyleSheet, Modal, View} from 'react-native';
 import {Icon, Text, Input, Button} from 'react-native-elements';
 
-import HeaderBar from '../../components/HeaderBar';
+import HeaderBar from '../../commons/components/HeaderBar';
 import {CONTAINER_PADDING, COLOR_PRIMARY} from "../../settings";
-import firebase from '../../services/firebase';
+import firebase from '../../commons/services/firebase';
 
 
 export default class CreateCircleModal extends React.Component {

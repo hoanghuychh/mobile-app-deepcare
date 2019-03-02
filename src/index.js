@@ -5,7 +5,7 @@ import MainDrawerNavigator from './screens/MainDrawerNavigator';
 import LoginContainer from './containers/LoginContainer';
 import PatientProfile from './screens/patientprofile/PatientProfile';
 import {AsyncStorage, ActivityIndicator, View} from "react-native";
-import axios, {setApiToken} from './services/axios';
+import axios, {setApiToken} from './commons/services/axios';
 
 
 class LoadingScreen extends React.Component {

@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {Icon, Text} from 'react-native-elements';
 
 import CreateCircleModal from './CreateCircleModal';
-import HeaderBar from '../../components/HeaderBar';
+import HeaderBar from '../../commons/components/HeaderBar';
 
 
 export default class Dashboard extends React.Component {

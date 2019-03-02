@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {Button, Text} from 'react-native-elements';
 import HeaderBar from './HeaderBar';
 
-import {getInitiative} from '../commons/Utils';
+import {getInitiative} from '../Utils';
 import axios from '../services/axios';
 
 
