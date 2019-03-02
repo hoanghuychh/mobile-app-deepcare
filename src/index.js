@@ -5,7 +5,6 @@ import MainDrawerNavigator from './screens/MainDrawerNavigator';
 import LoginContainer from './containers/LoginContainer';
 import PatientProfile from './screens/patientprofile/PatientProfile';
 import {AsyncStorage, ActivityIndicator, View} from "react-native";
-import $store from '../src/store';
 import axios, {setApiToken} from './services/axios';
 
 

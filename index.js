@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from "redux";
 import {Provider} from "react-redux";
 //Redux saga
 import createSagaMiddleware from "redux-saga";
-import {AppRegistry, YellowBox} from 'react-native';
+import {AppRegistry} from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import 'proxy-polyfill';
 import allReducers from "./src/reducers/Index";
@@ -24,6 +24,6 @@ sagaMiddleware.run(rootSaga);
 
 
 // Ignore specific yellowbox warnings
-YellowBox.ignoreWarnings(["Require cycle:", "Remote debugger", "Setting a timer"]);
+//YellowBox.ignoreWarnings(["Require cycle:", "Remote debugger", "Setting a timer"]);
 
 AppRegistry.registerComponent('amcoming', () => App);

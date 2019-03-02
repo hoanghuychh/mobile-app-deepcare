@@ -4,8 +4,6 @@ import {Button, Text} from 'react-native-elements';
 import HeaderBar from './HeaderBar';
 
 import {getInitiative} from '../commons/Utils';
-import {listen} from "../react-redux-auto";
-import $store from '../store';
 import axios from '../services/axios';
 
 
@@ -14,7 +12,6 @@ class SideBar extends React.Component {
         this.props.navigation.navigate('LoginScreen');
 
         await axios.get('session/logout');
-        $store.authClearUser();
     };
 
     render() {
@@ -32,4 +29,4 @@ class SideBar extends React.Component {
     }
 }
 
-export default listen('auth')(SideBar);
+export default SideBar;

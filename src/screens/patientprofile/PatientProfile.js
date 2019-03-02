@@ -69,7 +69,7 @@ export default class PatientProfile extends Component {
   }
 
   render() {
-      if(this.state.isLoading) {
+    if(this.state.isLoading) {
         return (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: "column"}}>
             <ActivityIndicator size="large"/>
@@ -84,6 +84,7 @@ export default class PatientProfile extends Component {
                 }}
                
             />
+            
             <View style={styles.layoutTop}>
             <ImageBackground source={require("../../../assets/bg_profile.jpg")} style={styles.layoutTop}>   
                 <View style={styles.wrapHeader}>

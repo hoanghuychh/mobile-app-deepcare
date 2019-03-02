@@ -1,8 +1,5 @@
 import React from 'react';
 import MapView from 'react-native-maps';
-import {listen} from './../react-redux-auto';
-import $store from '../store';
-
 
 class Map extends React.Component {
     render() {
@@ -19,4 +16,4 @@ class Map extends React.Component {
     }
 }
 
-export default listen('auth')(Map);
+export default Map;
