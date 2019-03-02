@@ -3,9 +3,8 @@ import {StyleSheet, Modal, View} from 'react-native';
 import {Icon, Text, Input, Button} from 'react-native-elements';
 
 import HeaderBar from '../../commons/components/HeaderBar';
-import {CONTAINER_PADDING, COLOR_PRIMARY} from "../../settings";
 import firebase from '../../commons/services/firebase';
-
+import Colors from "../../commons/Colors";
 
 export default class CreateCircleModal extends React.Component {
     state = {circleName: ''};
@@ -45,12 +44,12 @@ export default class CreateCircleModal extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: CONTAINER_PADDING,
+        padding: 10,
         justifyContent: 'space-between'
     },
 
     btnConfirm: {
-        backgroundColor: COLOR_PRIMARY,
+        backgroundColor: Colors.black,
         alignSelf: 'flex-end'
     }
 });
