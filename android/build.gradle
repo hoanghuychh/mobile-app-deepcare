@@ -2,10 +2,10 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "28.0.3"
-        minSdkVersion = 16
         compileSdkVersion = 28
-        targetSdkVersion = 25
+        targetSdkVersion = 28
+        buildToolsVersion = "28.0.3"
+        minSdkVersion = 17
         supportLibVersion = "28.0.0"
         googlePlayServicesVersion = "+"
         androidMapsUtilsVersion = "0.5+"
@@ -15,8 +15,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
-        classpath 'com.google.gms:google-services:4.1.0'
+        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.google.gms:google-services:4.0.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -25,6 +25,8 @@ buildscript {
 
 allprojects {
     repositories {
+        // Add jitpack repository (added by react-native-spinkit)
+        maven { url "https://jitpack.io" }
         mavenLocal()
         google()
         jcenter()
@@ -32,26 +34,12 @@ allprojects {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
         }
-        maven { url "https://maven.google.com" }
-        maven { url "https://jitpack.io" }
-
+        maven { url "http://tokbox.bintray.com/maven" }
     }
-}
 
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.4'
-    distributionUrl = distributionUrl.replace("bin", "all")
-}
-
-
-subprojects {
-    afterEvaluate {project ->
-        if (project.hasProperty("android")) {
-            android {
-                compileSdkVersion 28
-                buildToolsVersion '28.0.3'
-            }
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:deprecation"
         }
     }
 }

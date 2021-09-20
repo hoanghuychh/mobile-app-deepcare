@@ -1,42 +1,41 @@
 {
-  "name": "amcoming",
-  "main": "node_modules/expo/AppEntry.js",
+  "name": "Deepcare_V1",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "android": "node node_modules/react-native/local-cli/cli.js run-android",
-    "ios": "node node_modules/react-native/local-cli/cli.js run-ios",
-    "upgrade": "node node_modules/react-native/local-cli/cli.js upgrade",
-    "link": "node node_modules/react-native/local-cli/cli.js link",
-    "unlink": "node node_modules/react-native/local-cli/cli.js unlink",
-    "devtools": "react-devtools",
-    "flow": "flow",
     "test": "jest"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "circular-json": "^0.5.9",
-    "firebase": "^5.8.3",
-    "proxy-polyfill": "^0.3.0",
+    "firebase": "^5.8.5",
+    "opentok-react-native": "^0.11.2",
     "react": "^16.8.2",
-    "react-native": "^0.58.4",
-    "react-native-elements": "^1.0.0",
-    "react-native-fbsdk": "^0.8.0",
+    "react-native": "^0.59.9",
+    "react-native-elements": "^1.1.0",
+    "react-native-fbsdk": "^1.0.1",
     "react-native-firebase": "^5.2.2",
     "react-native-gesture-handler": "^1.0.15",
     "react-native-gifted-chat": "^0.7.2",
     "react-native-i18n": "^2.0.15",
     "react-native-invoke-app": "^1.0.4",
-    "react-native-maps": "^0.23.0",
     "react-native-popup-dialog": "^0.17.0",
+    "react-native-sha256": "^1.3.6",
     "react-native-vector-icons": "^6.3.0",
-    "react-navigation": "^3.3.0",
-    "react-redux": "^6.0.1",
-    "redux": "^4.0.1",
-    "redux-saga": "^1.0.2",
-    "socket.io-client": "^2.2.0"
+    "react-navigation": "^3.11.1",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
+    "redux-saga": "^1.0.2"
   },
   "devDependencies": {
-    "schedule": "^0.4.0"
+    "babel-jest": "23.4.2",
+    "babel-preset-react-native": "^5",
+    "jest": "^24.8.0",
+    "jetifier": "^1.6.5",
+    "react-test-renderer": "16.4.1"
   },
-  "private": true
+  "jest": {
+    "preset": "react-native"
+  }
 }

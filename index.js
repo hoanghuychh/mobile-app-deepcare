@@ -6,24 +6,17 @@ import {Provider} from "react-redux";
 import createSagaMiddleware from "redux-saga";
 import {AppRegistry} from 'react-native';
 import {createAppContainer} from 'react-navigation';
-import 'proxy-polyfill';
 import allReducers from "./src/reducers/Index";
 import rootSaga from "./src/sagas/rootSaga";
-import MainNavigator from './src';
+import DeepcareApp from './src/DeepcareApp';
 
 const sagaMiddleware = createSagaMiddleware();
 let store = createStore(allReducers, applyMiddleware(sagaMiddleware));
-const AppContainer = createAppContainer(MainNavigator);
-
 
 const App = () => <Provider store={store}>
-        <AppContainer />
+        <DeepcareApp />
       </Provider>
 
 sagaMiddleware.run(rootSaga);
 
-
-// Ignore specific yellowbox warnings
-//YellowBox.ignoreWarnings(["Require cycle:", "Remote debugger", "Setting a timer"]);
-
-AppRegistry.registerComponent('amcoming', () => App);
+AppRegistry.registerComponent('Deepcare_V1', () => App);

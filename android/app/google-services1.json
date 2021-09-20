@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "90500657369",
+    "firebase_url": "https://reduxsaga-c004b.firebaseio.com",
+    "project_id": "reduxsaga-c004b",
+    "storage_bucket": "reduxsaga-c004b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90500657369:android:f027f5b9a71852b73ecec8",
+        "android_client_info": {
+          "package_name": "com.deepcare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90500657369-fiu486m0qor8e2ltchd824e1dh8nhnnt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgCMzzWJzF9_3E1soJ0X40MciVayWrduI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90500657369-fiu486m0qor8e2ltchd824e1dh8nhnnt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -20,7 +20,9 @@ function* doLoginApi(input) {
     let dataBody = JSON.stringify({
       email: input.email,
       password: input.password,
-      phone: input.phone
+      phone: input.phone,
+      device_token:input.device_token,
+      
     });
     return yield handlePostRequest(StringUrl.URL_Login, headers, dataBody);
     

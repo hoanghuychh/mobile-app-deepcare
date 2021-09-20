@@ -3,7 +3,9 @@ import React from 'react';
 import {createSwitchNavigator} from 'react-navigation';
 import MainDrawerNavigator from './screens/MainDrawerNavigator';
 import LoginContainer from './containers/LoginContainer';
+import LoginScreen from './screens/Login'
 import PatientProfile from './screens/patientprofile/PatientProfile';
+import VideoCall from "./screens/Map";
 import {AsyncStorage, ActivityIndicator, View} from "react-native";
 import axios, {setApiToken} from './commons/services/axios';
 
@@ -27,10 +29,11 @@ class LoadingScreen extends React.Component {
 //createSwitchNavigator bỏ qua nút back
 const MainNavigator = createSwitchNavigator({
     LoadingScreen: LoadingScreen,
-    LoginScreen: LoginContainer,
+    LoginScreen: LoginScreen,
+    VideoCallScreen: VideoCall,
     MainDrawerNavigator: MainDrawerNavigator,
 }, {
-    initialRouteName: 'LoginScreen'
+    initialRouteName: 'VideoCallScreen'
 });
 
 export default MainNavigator;
